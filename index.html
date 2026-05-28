@@ -97,7 +97,7 @@
     const preview = document.getElementById("signature");
     const code = document.getElementById("htmlCode");
     const statusEl = document.getElementById("status");
-    const assetBase = new URL("assets/", window.location.href).href;
+    const assetBase = new URL("./", window.location.href).href;
 
     function value(id) {
       return document.getElementById(id).value.trim();
