@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gerador de Assinatura Nexu</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 28px;
+      background: #f4f6fb;
+      color: #10213f;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    main {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    section {
+      background: #fff;
+      border: 1px solid #d8deea;
+      border-radius: 8px;
+      padding: 18px;
+      box-shadow: 0 10px 28px rgba(16, 33, 63, .08);
+    }
+    h1 { margin: 0 0 16px; font-size: 22px; line-height: 1.2; }
+    label { display: grid; gap: 6px; margin-bottom: 12px; font-size: 13px; font-weight: 700; }
+    input {
+      height: 40px;
+      border: 1px solid #c8d0df;
+      border-radius: 6px;
+      padding: 0 10px;
+      font: 14px Arial, Helvetica, sans-serif;
+      color: #10213f;
+    }
+    button {
+      height: 42px;
+      border: 0;
+      border-radius: 6px;
+      padding: 0 14px;
+      background: #ffd467;
+      color: #001949;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .secondary { background: #e8edf6; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .preview { overflow-x: auto; padding-bottom: 8px; }
+    .hint { margin: 12px 0 0; color: #50617c; font-size: 13px; line-height: 1.45; }
+    textarea {
+      width: 100%;
+      height: 145px;
+      margin-top: 12px;
+      border: 1px solid #d8deea;
+      border-radius: 6px;
+      padding: 10px;
+      color: #17233c;
+      font: 11px Consolas, "Courier New", monospace;
+      resize: vertical;
+    }
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section>
+      <h1>Assinatura Nexu</h1>
+      <label>Nome <input id="name" value="Leticia Paola Barzon Oliveira"></label>
+      <label>Funcao <input id="role" value="PROJETOS"></label>
+      <label>Telefone <input id="phone" value="(11) 98729-1331"></label>
+      <label>Site <input id="website" value="https://www.nexuconsultoria.com.br"></label>
+      <label>Localizacao <input id="location" value="Sao Paulo, SP"></label>
+      <label>LinkedIn <input id="linkedin" value="https://www.linkedin.com/company/nexuconsultoria"></label>
+      <label>Instagram <input id="instagram" value="https://www.instagram.com/nexuconsultoria"></label>
+      <label>Facebook <input id="facebook" value="https://www.facebook.com/nexuconsultoria"></label>
+      <div class="actions">
+        <button id="copy" type="button">Copiar assinatura</button>
+        <button id="select" class="secondary" type="button">Selecionar</button>
+      </div>
+      <p class="hint" id="status">Depois de publicar no GitHub Pages, abra o link HTTPS e copie por aqui.</p>
+    </section>
+    <section>
+      <div class="preview"><div id="signature"></div></div>
+      <textarea id="htmlCode" spellcheck="false"></textarea>
+    </section>
+  </main>
+
+  <script>
+    const fields = ["name", "role", "phone", "website", "location", "linkedin", "instagram", "facebook"];
+    const preview = document.getElementById("signature");
+    const code = document.getElementById("htmlCode");
+    const statusEl = document.getElementById("status");
+    const assetBase = new URL("assets/", window.location.href).href;
+
+    function value(id) {
+      return document.getElementById(id).value.trim();
+    }
+
+    function esc(text) {
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function phoneHref(phone) {
+      const digits = String(phone || "").replace(/\D/g, "");
+      return digits ? "https://wa.me/55" + digits : "#";
+    }
+
+    function siteLabel(url) {
+      return String(url || "").replace(/^https?:\/\//, "").replace(/\/$/, "");
+    }
+
+    function signatureHtml() {
+      const name = esc(value("name"));
+      const role = esc(value("role").toUpperCase());
+      const phone = esc(value("phone"));
+      const whatsapp = esc(phoneHref(value("phone")));
+      const website = esc(value("website"));
+      const websiteText = esc(siteLabel(value("website")));
+      const location = esc(value("location"));
+      const map = esc("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(value("location")));
+      const linkedin = esc(value("linkedin"));
+      const instagram = esc(value("instagram"));
+      const facebook = esc(value("facebook"));
+
+      return `
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="width:600px;max-width:600px;height:174px;border-collapse:separate;border-spacing:0;border-radius:14px;overflow:hidden;background:#001949 url('${assetBase}fundo-limpo-1200x348.png') center/600px 174px no-repeat;font-family:Arial,Helvetica,sans-serif;">
+  <tr>
+    <td width="108" height="174" style="width:108px;height:174px;padding:0;vertical-align:middle;">
+      <img src="${assetBase}nexu-n-dourado.png" width="70" height="70" alt="Nexu" style="display:block;width:70px;height:70px;margin-left:24px;border:0;">
+    </td>
+    <td width="2" style="width:2px;padding:0;vertical-align:middle;">
+      <div style="width:2px;height:94px;background:#ffd467;font-size:0;line-height:0;">&nbsp;</div>
+    </td>
+    <td width="218" style="width:218px;padding:0 0 0 16px;vertical-align:middle;">
+      <div style="font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:22px;line-height:26px;font-weight:800;color:#ffffff;mso-line-height-rule:exactly;">${name}</div>
+      <div style="height:8px;font-size:0;line-height:0;">&nbsp;</div>
+      <div style="font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:10px;line-height:14px;font-weight:700;letter-spacing:3px;color:#ffd467;text-transform:uppercase;mso-line-height-rule:exactly;">${role}</div>
+    </td>
+    <td width="254" style="width:254px;padding:0 18px 0 0;vertical-align:middle;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="236" style="width:236px;border-collapse:collapse;">
+        <tr>
+          <td width="24" height="25" style="width:24px;height:25px;padding:0;vertical-align:middle;"><a href="${whatsapp}" target="_blank"><img src="${assetBase}whatsapp.png" width="15" height="15" alt="WhatsApp" style="display:block;width:15px;height:15px;border:0;"></a></td>
+          <td height="25" style="height:25px;padding:0;vertical-align:middle;font-size:12.5px;line-height:16px;color:#ffffff;"><a href="${whatsapp}" target="_blank" style="color:#ffffff;text-decoration:none;">${phone}</a></td>
+        </tr>
+        <tr>
+          <td width="24" height="25" style="width:24px;height:25px;padding:0;vertical-align:middle;"><a href="${website}" target="_blank"><img src="${assetBase}site.png" width="15" height="15" alt="Site" style="display:block;width:15px;height:15px;border:0;"></a></td>
+          <td height="25" style="height:25px;padding:0;vertical-align:middle;font-size:12.5px;line-height:16px;color:#ffffff;"><a href="${website}" target="_blank" style="color:#ffffff;text-decoration:none;">${websiteText}</a></td>
+        </tr>
+        <tr>
+          <td width="24" height="25" style="width:24px;height:25px;padding:0;vertical-align:middle;"><a href="${map}" target="_blank"><img src="${assetBase}localizacao.png" width="15" height="15" alt="Localizacao" style="display:block;width:15px;height:15px;border:0;"></a></td>
+          <td height="25" style="height:25px;padding:0;vertical-align:middle;font-size:12.5px;line-height:16px;color:#ffffff;"><a href="${map}" target="_blank" style="color:#ffffff;text-decoration:none;">${location}</a></td>
+        </tr>
+        <tr><td colspan="2" height="10" style="height:10px;font-size:0;line-height:0;">&nbsp;</td></tr>
+        <tr>
+          <td colspan="2" style="padding:0;">
+            <a href="${linkedin}" target="_blank" style="display:inline-block;margin-right:18px;"><img src="${assetBase}linkedin.png" width="16" height="16" alt="LinkedIn" style="display:block;width:16px;height:16px;border:0;"></a>
+            <a href="${instagram}" target="_blank" style="display:inline-block;margin-right:18px;"><img src="${assetBase}instagram.png" width="16" height="16" alt="Instagram" style="display:block;width:16px;height:16px;border:0;"></a>
+            <a href="${facebook}" target="_blank" style="display:inline-block;"><img src="${assetBase}facebook.png" width="16" height="16" alt="Facebook" style="display:block;width:16px;height:16px;border:0;"></a>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="4" style="height:0;padding:0;line-height:0;font-size:0;">
+      <img src="${assetBase}nexu-wordmark.png" width="80" height="40" alt="Nexu Consultoria" style="display:block;width:80px;height:40px;border:0;margin:-56px 18px 16px auto;">
+    </td>
+  </tr>
+</table>`.trim();
+    }
+
+    function refresh() {
+      const html = signatureHtml();
+      preview.innerHTML = html;
+      code.value = html;
+    }
+
+    function selectSignature() {
+      const range = document.createRange();
+      range.selectNode(preview);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+
+    document.getElementById("copy").addEventListener("click", async () => {
+      refresh();
+      try {
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            "text/html": new Blob([code.value], { type: "text/html" }),
+            "text/plain": new Blob([value("name") + " - " + value("role")], { type: "text/plain" })
+          })
+        ]);
+        statusEl.textContent = "Assinatura copiada. Cole no campo de assinatura do email.";
+      } catch (error) {
+        selectSignature();
+        document.execCommand("copy");
+        statusEl.textContent = "Copiada pelo modo alternativo. Cole no campo de assinatura.";
+      }
+    });
+
+    document.getElementById("select").addEventListener("click", () => {
+      refresh();
+      selectSignature();
+      statusEl.textContent = "Assinatura selecionada. Pressione Ctrl+C e cole no campo de assinatura.";
+    });
+
+    fields.forEach((id) => document.getElementById(id).addEventListener("input", refresh));
+    refresh();
+  </script>
+</body>
+</html>
